@@ -13,12 +13,25 @@ const config = defineConfig({
   server: {
     host: '0.0.0.0',
     port: 3000,
+    strictPort: true,
     watch: {
       usePolling: true,
     },
+    allowedHosts: [
+      'openwearables.ekygai.com',
+      'localhost',
+      '127.0.0.1',
+      '.ekygai.com',
+    ],
   },
   plugins: [
+    // IMPORTANT: tanstackStart MUST be before viteReact
     devtools(),
+    tanstackStart(),
+    viteReact({
+      jsxRuntime: 'automatic',
+      jsxImportSource: 'react',
+    }),
     nitro({
       // Nitro server configuration for production SSR
       devServer: {
@@ -35,8 +48,6 @@ const config = defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-    tanstackStart(),
-    viteReact(),
   ],
 });
 
