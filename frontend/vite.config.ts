@@ -27,7 +27,13 @@ const config = defineConfig({
   plugins: [
     // IMPORTANT: tanstackStart MUST be before viteReact
     devtools(),
-    tanstackStart(),
+    tanstackStart({
+      router: {
+        // Force production mode for router code generation
+        generatedRouteTree: 'src/routeTree.gen.ts',
+        autoCodeSplitting: true,
+      },
+    }),
     viteReact(),
     nitro({
       // Nitro server configuration for production SSR
