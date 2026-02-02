@@ -28,10 +28,7 @@ const config = defineConfig({
     // IMPORTANT: tanstackStart MUST be before viteReact
     devtools(),
     tanstackStart(),
-    viteReact({
-      jsxRuntime: 'automatic',
-      jsxImportSource: 'react',
-    }),
+    viteReact(),
     nitro({
       // Nitro server configuration for production SSR
       devServer: {
