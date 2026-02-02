@@ -8,8 +8,8 @@
   },
   "scripts": {
     "dev": "vite dev --port 3000",
-    "build": "vite build",
-    "serve": "vite preview",
+    "build": "NODE_ENV=production vite build --mode production",
+    "serve": "NODE_ENV=production vite preview",
     "test": "vitest run",
     "lint": "oxlint -c .oxlintrc.json src",
     "lint:fix": "oxlint -c .oxlintrc.json --fix src",

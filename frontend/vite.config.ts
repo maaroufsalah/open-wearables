@@ -6,9 +6,22 @@ import viteTsConfigPaths from 'vite-tsconfig-paths';
 import tailwindcss from '@tailwindcss/vite';
 import { nitro } from 'nitro/vite';
 
+// Force production mode for builds
+if (process.env.NODE_ENV === 'production') {
+  process.env.NODE_ENV = 'production';
+}
+
+const isProd = process.env.NODE_ENV === 'production';
+
 const config = defineConfig({
+  mode: isProd ? 'production' : 'development',
+  define: {
+    'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV || 'development'),
+  },
   build: {
     outDir: 'dist',
+    target: 'esnext',
+    minify: isProd ? 'esbuild' : false,
   },
   server: {
     host: '0.0.0.0',
@@ -26,15 +39,17 @@ const config = defineConfig({
   },
   plugins: [
     // IMPORTANT: tanstackStart MUST be before viteReact
-    devtools(),
+    // Only include devtools in development
+    !isProd && devtools(),
     tanstackStart({
       router: {
-        // Force production mode for router code generation
         generatedRouteTree: 'src/routeTree.gen.ts',
         autoCodeSplitting: true,
       },
     }),
-    viteReact(),
+    viteReact({
+      jsxRuntime: 'automatic',
+    }),
     nitro({
       // Nitro server configuration for production SSR
       devServer: {
@@ -51,7 +66,7 @@ const config = defineConfig({
       projects: ['./tsconfig.json'],
     }),
     tailwindcss(),
-  ],
+  ].filter(Boolean),
 });
 
 export default config;
